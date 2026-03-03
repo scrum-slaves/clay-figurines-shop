@@ -1,18 +1,35 @@
-from django.contrib import admin
+﻿from django.contrib import admin
+
+from .models import Collection, Master, Product, ProductType
 
 
-# TODO: после добавления моделей подключить их к Django Admin.
-# Пример:
-# from .models import Product, ProductType, ProductImage
-#
-# @admin.register(Product)
-# class ProductAdmin(admin.ModelAdmin):
-#     list_display = ("id", "name", "price", "stock", "is_active")
-#
-# @admin.register(ProductType)
-# class ProductTypeAdmin(admin.ModelAdmin):
-#     list_display = ("id", "name")
-#
-# @admin.register(ProductImage)
-# class ProductImageAdmin(admin.ModelAdmin):
-#     list_display = ("id", "product", "is_cover")
+@admin.register(ProductType)
+class ProductTypeAdmin(admin.ModelAdmin):
+    list_display = ("id", "name")
+    search_fields = ("name",)
+
+
+@admin.register(Collection)
+class CollectionAdmin(admin.ModelAdmin):
+    list_display = ("id", "name")
+    search_fields = ("name",)
+
+
+@admin.register(Master)
+class MasterAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "first_name",
+        "last_name",
+        "telegram_username",
+        "email",
+        "phone",
+    )
+    search_fields = ("first_name", "last_name", "telegram_username", "email", "phone")
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "product_type", "collection", "master", "price", "stock_qty")
+    list_filter = ("product_type", "collection", "master")
+    search_fields = ("name", "material", "description")
