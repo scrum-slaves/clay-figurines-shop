@@ -38,13 +38,11 @@ services:
     working_dir: /app
     env_file:
       - .env
-    command: >
-      sh -c "npm install
-      && npm run dev -- --host 0.0.0.0 --port 5173"
-    volumes:
-      - ./frontend:/app
-    ports:
-      - "5173:5173"
+    # temporary stub: keep frontend container silent while frontend development is separate
+    command: sh -c "tail -f /dev/null"
+    # do not mount frontend code to avoid noisy npm logs
+    ports: []
+    volumes: []
     depends_on:
       - backend
 

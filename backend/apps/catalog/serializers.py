@@ -1,36 +1,99 @@
 from rest_framework import serializers
 
+from .models import Collection, Master, Product, ProductType
 
-class TypeSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
+
+class TypeSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
 
+    class Meta:
+        model = ProductType
+        fields = ["id", "name"]
 
-class ProductCardSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
+
+class CollectionSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
-    price = serializers.DecimalField(max_digits=10, decimal_places=2)
-    cover_url = serializers.CharField(allow_blank=True, required=False)
-    type_id = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = Collection
+        fields = ["id", "name"]
 
 
-class ProductDetailSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    name = serializers.CharField()
-    description = serializers.CharField(allow_blank=True)
-    characteristics = serializers.DictField(
-        child=serializers.CharField(), required=False, default=dict
-    )
-    price = serializers.DecimalField(max_digits=10, decimal_places=2)
-    cover_url = serializers.CharField(allow_blank=True, required=False)
-    image_urls = serializers.ListField(
-        child=serializers.CharField(), required=False, default=list
-    )
-    stock = serializers.IntegerField(required=False)
-    is_active = serializers.BooleanField(required=False)
+class MasterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Master
+        fields = ["id", "first_name", "last_name", "email"]
 
 
-# TODO: после добавления моделей можно перейти на ModelSerializer и привязать:
-# - ProductType(id, name)
-# - Product(id, name, description, characteristics, price, stock, is_active, type)
-# - ProductImage(id, product, image, is_cover)
+class ProductCardSerializer(serializers.ModelSerializer):
+    product_type = serializers.CharField(source="product_type.name", read_only=True)
+    collection = serializers.CharField(source="collection.name", read_only=True)
+    photo_base64 = serializers.SerializerMethodField()
+    in_stock = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = ["id", "name", "price", "photo_base64", "in_stock", "product_type", "collection"]
+
+    def get_photo_base64(self, obj):
+        if obj.photo_blob:
+            import base64
+            return base64.b64encode(obj.photo_blob).decode('utf-8')
+        return None
+
+    def get_in_stock(self, obj):
+        return obj.stock_qty > 0
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
+    product_type = TypeSerializer(read_only=True)
+    collection = CollectionSerializer(read_only=True)
+    master = MasterSerializer(read_only=True)
+    photo_base64 = serializers.SerializerMethodField()
+    in_stock = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = [
+            "id",
+            "name",
+            "description",
+            "price",
+            "photo_base64",
+            "stock_qty",
+            "in_stock",
+            "product_type",
+            "collection",
+            "master",
+            "size",
+            "weight",
+            "material",
+        ]
+
+    def get_photo_base64(self, obj):
+        if obj.photo_blob:
+            import base64
+            return base64.b64encode(obj.photo_blob).decode('utf-8')
+        return None
+
+    def get_in_stock(self, obj):
+        return obj.stock_qty > 0
+
+
+class CartItemSerializer(serializers.Serializer):
+    product_id = serializers.IntegerField(min_value=1)
+    qty = serializers.IntegerField(min_value=1)
+
+
+class ValidateCartRequestSerializer(serializers.Serializer):
+    items = CartItemSerializer(many=True)
+
+
+class CartProblemSerializer(serializers.Serializer):
+    product_id = serializers.IntegerField()
+    reason = serializers.ChoiceField(choices=["deleted_or_inactive", "not_enough_stock"])
+    missing = serializers.IntegerField(required=False)
+
+class ValidateCartResponseSerializer(serializers.Serializer):
+    ok = serializers.BooleanField()
+    problems = CartProblemSerializer(many=True)
