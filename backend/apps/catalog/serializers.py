@@ -37,8 +37,15 @@ class ProductCardSerializer(serializers.ModelSerializer):
 
     def get_photo_base64(self, obj):
         if obj.photo_blob:
-            import base64
-            return base64.b64encode(obj.photo_blob).decode('utf-8')
+            try:
+                data = obj.photo_blob.read()
+            except Exception:
+                return None
+
+            if data:
+                import base64
+
+                return base64.b64encode(data).decode("utf-8")
         return None
 
     def get_in_stock(self, obj):
@@ -72,8 +79,15 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
     def get_photo_base64(self, obj):
         if obj.photo_blob:
-            import base64
-            return base64.b64encode(obj.photo_blob).decode('utf-8')
+            try:
+                data = obj.photo_blob.read()
+            except Exception:
+                return None
+
+            if data:
+                import base64
+
+                return base64.b64encode(data).decode("utf-8")
         return None
 
     def get_in_stock(self, obj):
