@@ -26,7 +26,8 @@ clay-shop/
 cd backend
 python -m venv .venv
 # Windows PowerShell:
-.\.venv\Scripts\Activate.ps1
+.\.venv\Scripts\Activate.ps1   ## для Мариного компа cmd:    d:\Git\clay-figurines-shop\backend\.venv\Scripts\activate
+## в (.venv)
 pip install -r requirements.txt
 ```
 
