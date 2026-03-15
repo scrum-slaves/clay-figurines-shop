@@ -69,6 +69,9 @@ Frontend будет доступен на `http://localhost:5173`.
 
 ```bash
 docker-compose up --build
+# Импорт заполненной БД на новое устройство, dump.sql в корневой директории 
+docker cp dump.sql clay-shop-db:/dump.sql
+docker exec clay-shop-db psql -U clay_shop -d clay_shop -f /dump.sql
 ```
 
 Первый запуск может занять время, так как:
