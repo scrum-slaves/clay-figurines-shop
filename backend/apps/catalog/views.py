@@ -71,7 +71,7 @@ class ProductListAPIView(APIView):
         except NotImplementedError as exc:
             return Response({"detail": str(exc)}, status=status.HTTP_501_NOT_IMPLEMENTED)
         
-        serializer = ProductCardSerializer(data, many=True)
+        serializer = ProductCardSerializer(data, many=True, context={"request": request})
         return Response(serializer.data)
 
 
@@ -91,7 +91,7 @@ class ProductDetailAPIView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        serializer = ProductDetailSerializer(data)
+        serializer = ProductDetailSerializer(data, context={"request": request})
         return Response(serializer.data)
 
 
@@ -133,7 +133,7 @@ class ProductFilterAPIView(APIView):
         except NotImplementedError as exc:
             return Response({"detail": str(exc)}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
-        serializer = ProductCardSerializer(data, many=True)
+        serializer = ProductCardSerializer(data, many=True, context={"request": request})
         return Response(serializer.data)
 
 

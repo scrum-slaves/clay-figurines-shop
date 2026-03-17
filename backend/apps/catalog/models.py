@@ -64,11 +64,7 @@ class Product(models.Model):
         on_delete=models.PROTECT,
         related_name="products",
     )
-    photo_blob = models.ImageField(
-        upload_to="product_photos/",
-        blank=True,
-        null=True,
-    )
+    photo_blob = models.BinaryField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     material = models.CharField(max_length=150, blank=True, null=True)
     price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
