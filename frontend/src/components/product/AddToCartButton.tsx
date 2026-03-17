@@ -12,7 +12,7 @@ export function AddToCartButton({
   fullWidth = false,
 }: AddToCartButtonProps) {
   return (
-    <Button disabled={disabled} fullWidth={fullWidth} onClick={onClick}>
+    <Button data-testid="product-detail-add-to-cart" disabled={disabled} fullWidth={fullWidth} onClick={onClick}>
       Добавить в корзину
     </Button>
   );

@@ -31,6 +31,7 @@ export function TypeFilter({
             return (
               <label
                 className="flex cursor-pointer items-center gap-3 text-sm leading-6 text-[var(--text-primary)]"
+                data-testid={`type-filter-option-${option.id}`}
                 key={option.id}
               >
                 <span

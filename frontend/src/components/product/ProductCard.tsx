@@ -12,8 +12,12 @@ type ProductCardProps = {
 
 export function ProductCard({ product, onAddToCart }: ProductCardProps) {
   return (
-    <article className="group flex h-full flex-col rounded-[28px] border border-[var(--line)] bg-white p-4 transition-all hover:-translate-y-1 hover:border-[var(--line-strong)]">
-      <Link className="block" to={`/products/${product.id}`}>
+    <article
+      className="group flex h-full flex-col rounded-[28px] border border-[var(--line)] bg-white p-4 transition-all hover:-translate-y-1 hover:border-[var(--line-strong)]"
+      data-product-id={String(product.id)}
+      data-testid="product-card"
+    >
+      <Link className="block" data-testid={`product-card-link-${product.id}`} to={`/products/${product.id}`}>
         <div className="aspect-[4/5] overflow-hidden rounded-[22px] bg-[var(--surface-secondary)]">
           <ImageWithFallback
             alt={product.title}
@@ -49,11 +53,12 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
           <p className="text-xl font-semibold text-[var(--text-primary)]">{formatCurrency(product.price)}</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button className="flex-1" disabled={!product.inStock} onClick={() => onAddToCart(product)}>
+          <Button className="flex-1" data-testid={`product-card-add-to-cart-${product.id}`} disabled={!product.inStock} onClick={() => onAddToCart(product)}>
             В корзину
           </Button>
           <Link
             className="inline-flex items-center justify-center rounded-full border border-[var(--line-strong)] px-4 py-3 text-sm font-semibold text-[var(--text-primary)] transition-colors hover:bg-[var(--surface-secondary)]"
+            data-testid={`product-card-details-link-${product.id}`}
             to={`/products/${product.id}`}
           >
             Подробнее

@@ -214,6 +214,8 @@ frontend/*.tsbuildinfo
 frontend/.env.local
 frontend/.env.*.local
 frontend/npm-cache/
+frontend/.playwright-artifacts/
+frontend/playwright-report/
 coverage/
 npm-debug.log*
 yarn-debug.log*

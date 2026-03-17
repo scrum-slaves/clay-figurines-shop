@@ -74,8 +74,15 @@ docker cp dump.sql clay-shop-db:/dump.sql
 docker exec clay-shop-db psql -U clay_shop -d clay_shop -f /dump.sql
 ```
 
+Перед запуском основных сервисов `docker-compose up --build` теперь автоматически прогоняет:
+- `backend-tests` (`python manage.py test`)
+- `frontend-tests` (`npm run test:e2e`)
+
+Если любой из наборов тестов падает, `backend`/`frontend` не стартуют.
+
 Первый запуск может занять время, так как:
 - Будут установлены все зависимости Python и Node.js в контейнерах
+- Для frontend image будет установлен Playwright Chromium для e2e
 - БД будет инициализирована (миграции, суперпользователь admin:admin123)
 
 После полного запуска все компоненты будут доступны на:

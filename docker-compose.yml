@@ -16,6 +16,15 @@ services:
       timeout: 5s
       retries: 10
 
+  backend-tests:
+    build:
+      context: ./backend
+    container_name: clay-shop-backend-tests
+    working_dir: /app
+    env_file:
+      - .env
+    command: python manage.py test
+
   backend:
     build:
       context: ./backend
@@ -43,6 +52,15 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      backend-tests:
+        condition: service_completed_successfully
+
+  frontend-tests:
+    build:
+      context: ./frontend
+    container_name: clay-shop-frontend-tests
+    working_dir: /app
+    command: npm run test:e2e
 
   frontend:
     build:
@@ -63,7 +81,10 @@ services:
     ports:
       - "5173:5173"
     depends_on:
-      - backend
+      backend:
+        condition: service_started
+      frontend-tests:
+        condition: service_completed_successfully
 
 volumes:
   postgres_data:

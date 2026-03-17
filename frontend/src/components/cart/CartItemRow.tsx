@@ -17,7 +17,11 @@ export function CartItemRow({ item, onUpdateQty, onRemove }: CartItemRowProps) {
   const lineTotal = (item.product?.price ?? 0) * item.qty;
 
   return (
-    <article className="grid gap-5 rounded-[30px] border border-[var(--line)] bg-white p-5 sm:grid-cols-[140px_minmax(0,1fr)] lg:grid-cols-[140px_minmax(0,1fr)_220px]">
+    <article
+      className="grid gap-5 rounded-[30px] border border-[var(--line)] bg-white p-5 sm:grid-cols-[140px_minmax(0,1fr)] lg:grid-cols-[140px_minmax(0,1fr)_220px]"
+      data-product-id={String(item.productId)}
+      data-testid="cart-item-row"
+    >
       <div className="overflow-hidden rounded-[24px] bg-[var(--surface-secondary)]">
         <div className="aspect-square">
           <ImageWithFallback alt={title} className="h-full w-full object-cover" src={image} />

@@ -153,7 +153,7 @@ export function CheckoutPage() {
       ) : null}
 
       {items.length > 0 ? (
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]" data-testid="checkout-page">
           <div className="space-y-5">
             {!masterUsername?.trim() ? (
               <StatusCard
@@ -170,17 +170,17 @@ export function CheckoutPage() {
             {error ? <StatusCard description={error} title="Не удалось оформить заказ." tone="error" /> : null}
 
             {problems.length > 0 ? (
-              <div className="rounded-[30px] border border-[#d7b3ae] bg-[#fff1ef] px-6 py-6 text-[#7b2d21]">
+              <div className="rounded-[30px] border border-[#d7b3ae] bg-[#fff1ef] px-6 py-6 text-[#7b2d21]" data-testid="checkout-problems">
                 <h2 className="text-lg font-semibold">Есть проблемы с доступностью товаров</h2>
                 <ul className="mt-4 space-y-2 text-sm leading-6">
                   {problems.map((problem) => (
-                    <li key={`${problem.productId}-${problem.reason}`}>{formatProblem(problem)}</li>
+                    <li data-testid="checkout-problem" key={`${problem.productId}-${problem.reason}`}>{formatProblem(problem)}</li>
                   ))}
                 </ul>
               </div>
             ) : null}
 
-            <form className="rounded-[30px] border border-[var(--line)] bg-white p-6 lg:p-8" onSubmit={handleSubmit}>
+            <form className="rounded-[30px] border border-[var(--line)] bg-white p-6 lg:p-8" data-testid="checkout-form" onSubmit={handleSubmit}>
               <div className="grid gap-5">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--text-muted)]">
@@ -193,6 +193,7 @@ export function CheckoutPage() {
                   Имя и фамилия
                   <input
                     className="w-full rounded-[22px] border border-[var(--line)] bg-[var(--surface-primary)] px-4 py-3 outline-none transition-colors focus:border-[var(--line-strong)]"
+                    data-testid="checkout-customer-name"
                     onChange={(event) => updateField("customerName", event.target.value)}
                     placeholder="Например, Мария Смирнова"
                     required
@@ -205,6 +206,7 @@ export function CheckoutPage() {
                   Телефон
                   <input
                     className="w-full rounded-[22px] border border-[var(--line)] bg-[var(--surface-primary)] px-4 py-3 outline-none transition-colors focus:border-[var(--line-strong)]"
+                    data-testid="checkout-phone"
                     onChange={(event) => updateField("phone", event.target.value)}
                     placeholder="+7 999 123-45-67"
                     required
@@ -217,6 +219,7 @@ export function CheckoutPage() {
                   Адрес доставки
                   <textarea
                     className="min-h-28 w-full rounded-[22px] border border-[var(--line)] bg-[var(--surface-primary)] px-4 py-3 outline-none transition-colors focus:border-[var(--line-strong)]"
+                    data-testid="checkout-address"
                     onChange={(event) => updateField("address", event.target.value)}
                     placeholder="Город, улица, дом, квартира, ориентир"
                     required
@@ -224,7 +227,7 @@ export function CheckoutPage() {
                   />
                 </label>
 
-                <Button disabled={isSubmitting || !masterUsername?.trim()} fullWidth type="submit">
+                <Button data-testid="checkout-submit" disabled={isSubmitting || !masterUsername?.trim()} fullWidth type="submit">
                   {isSubmitting ? "Проверяем корзину..." : "Оформить через Telegram"}
                 </Button>
               </div>
@@ -240,7 +243,7 @@ export function CheckoutPage() {
 
               <div className="space-y-4 border-y border-[var(--line)] py-5">
                 {items.map((item) => (
-                  <div className="grid grid-cols-[72px_minmax(0,1fr)] gap-4" key={`${item.productId}`}>
+                  <div className="grid grid-cols-[72px_minmax(0,1fr)] gap-4" data-product-id={String(item.productId)} data-testid="checkout-order-item" key={`${item.productId}`}>
                     <div className="overflow-hidden rounded-[18px] bg-[var(--surface-secondary)]">
                       <div className="aspect-square">
                         <ImageWithFallback

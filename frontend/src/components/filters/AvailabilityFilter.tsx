@@ -14,6 +14,7 @@ export function AvailabilityFilter({ value, onChange }: AvailabilityFilterProps)
           <input
             checked={value === "all"}
             className="h-4 w-4 accent-[var(--text-primary)]"
+            data-testid="availability-all"
             name="availability"
             onChange={() => onChange("all")}
             type="radio"
@@ -24,6 +25,7 @@ export function AvailabilityFilter({ value, onChange }: AvailabilityFilterProps)
           <input
             checked={value === "in_stock"}
             className="h-4 w-4 accent-[var(--text-primary)]"
+            data-testid="availability-in-stock"
             name="availability"
             onChange={() => onChange("in_stock")}
             type="radio"

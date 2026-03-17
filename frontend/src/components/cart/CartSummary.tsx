@@ -40,6 +40,7 @@ export function CartSummary({
         <div className="space-y-3">
           <Link
             className="inline-flex w-full items-center justify-center rounded-full border border-[var(--text-primary)] bg-[var(--text-primary)] px-5 py-3 text-sm font-semibold text-[var(--panel-bg)] transition-colors hover:bg-[#34302b]"
+            data-testid="cart-summary-action"
             to={actionTo}
           >
             {actionLabel}
